@@ -1,13 +1,23 @@
-
 Contacts = {}
 
 Contacts.model = function () {
-  // Model code goes here
+  this.name  = m.prop('[Your name]')
+  this.email = m.prop('[Your email]')
 };
 
-Contacts.vm = {}
+Contacts.vm = {
+  contacts: m.prop( [new Contacts.model()] )
+}
 
 Contacts.controller = function () {
-  // Controller code goes here
-  var ctrl = this;
+  var vm = Contacts.vm
+  var ctrl = this
+
+  ctrl.add = function () {
+    var newModel = new Contacts.model()
+    vm.contacts().push(newModel)
+  }
+  ctrl.remove = function (idx) {
+    vm.contacts().splice(idx, 1)
+  }
 }
