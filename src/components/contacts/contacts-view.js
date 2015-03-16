@@ -11,7 +11,7 @@ Contacts.view = function (ctrl) {
 
   var removeAnchor = function (idx) {
     if (vm.contacts().length >= 2) {
-      return m('a', { onclick: ctrl.remove.curry(idx), href:'#' }, 'remove')
+      return m('a', { onclick: ctrl.remove.papp(idx), href:'#' }, 'remove')
     }
   }
 
