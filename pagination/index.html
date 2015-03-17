@@ -1,0 +1,33 @@
+<html>
+<head>
+  <title>Pagination Component Demo</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<script type="text/javascript" src="../vendor/mithril.js"></script>
+<script type="text/javascript" src="../ext/arrays.js"></script>
+<script type="text/javascript" src="pagination.js"></script>
+
+<script type="text/javascript">
+  var App = {
+    controller: function () {
+      this.page = m.prop(2)
+    },
+    view: function (ctrl) {
+      return m('.app', [
+        m('h1', "Pagination Component"),
+        m('h3', "We are on page " + (ctrl.page() + 1)),
+        m.module(Pagination, {
+          totalRowCount: 64,
+          perPage: 10,
+          onPageChange: ctrl.page
+        })
+      ])
+    }
+  }
+  m.module(document.body, App)
+</script>
+
+</body>
+</html>
