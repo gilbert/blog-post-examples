@@ -5,9 +5,11 @@ Contacts.model = function () {
   // Model code goes here
 };
 
-Contacts.vm = {}
-
 Contacts.controller = function () {
-  // Controller code goes here
   var ctrl = this;
+  // Controller code goes here
+}
+
+Contacts.view = function (ctrl) {
+  // View code goes here
 }
