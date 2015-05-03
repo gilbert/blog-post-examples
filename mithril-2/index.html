@@ -1,0 +1,29 @@
+<html>
+<head>
+  <title>Volunteer Events</title>
+</head>
+<body>
+
+<a href="../index.html">&lt; Back to All Examples</a>
+<a href="https://github.com/mindeavor/blog-post-examples/tree/gh-pages/mithril-2">View Source on GitHub</a>
+
+<h1>Event Signup</h1>
+
+<div id="app"></div>
+
+<p><em>Hint: The correct coupon code is <b>happy</b></em></p>
+
+<script src="../vendor/mithril.js"></script>
+<script src="../ext/functions.js"></script>
+
+<script src="src/components/contacts/contacts.js"></script>
+<script src="src/components/coupon/coupon.js"></script>
+<script src="src/components/total/total.js"></script>
+<script src="src/components/volunteer-form/volunteer-form.js"></script>
+
+<script>
+  m.mount(document.getElementById('app'), VolunteerForm)
+</script>
+
+</body>
+</html>
