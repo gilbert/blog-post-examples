@@ -1,5 +1,4 @@
-
-Coupon = {}
+window.Coupon = {}
 
 Coupon.controller = function () {
   var ctrl = this;
