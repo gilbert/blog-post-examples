@@ -2,9 +2,9 @@ window.Coupon = {}
 
 Coupon.controller = function () {
   var ctrl = this;
-  // Controller code goes here
+  // TODO: Controller code goes here
 }
 
 Coupon.view = function (ctrl) {
-  // View code goes here
+  // TODO: View code goes here
 }

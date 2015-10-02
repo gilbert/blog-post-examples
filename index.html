@@ -38,8 +38,26 @@
 
   // Put the component on the page
   m.route(document.getElementById('app'), '/', {
+
     '/': EntryList,
-    '/entries/new': EntryForm
+
+    '/entries/new': EntryForm,
+
+    '/example': {
+      controller: function () {
+        var ctrl = this
+        ctrl.data = [10,20,30]
+      },
+      view: function (ctrl) {
+        return m('.example-page', [
+          m('a[href=/]', { config: m.route }, "< Back"),
+          m('select', ctrl.data.map(function(n) {
+            return m('option', { value: n }, "Number: " + n)
+          }))
+        ])
+      }
+    }
+
   })
 </script>
 
