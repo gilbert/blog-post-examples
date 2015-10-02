@@ -3,13 +3,8 @@ window.EntryForm = {}
 EntryForm.controller = function () {
   var ctrl = this
   ctrl.entry = Entry.vm()
+  ctrl.discount = 0
 
-  ctrl.add = function () {
-    ctrl.entry.volunteers.push( Entry.volunteerVM() )
-  }
-  ctrl.remove = function (idx) {
-    ctrl.entry.volunteers.splice(idx, 1)
-  }
   ctrl.submit = function () {
     Entry.create( ctrl.entry )
     m.route('/')
@@ -21,38 +16,19 @@ EntryForm.view = function (ctrl) {
     m('h1', "Entry Form"),
     m('h3', "Please enter each volunteer's contact information:"),
 
-    ctrl.entry.volunteers.map(function(volunteer, idx) {
-      return m('fieldset', [
-        m('legend', "Volunteer #" + (idx+1)),
+    m.component(Volunteers, { volunteers: ctrl.entry.volunteers }),
 
-        m('label', "Name:"),
-        m('input[type=text]', {
-          value: volunteer.name,
-          onchange: function(e) {
-            volunteer.name = e.currentTarget.value
-          }
-        }),
-        m('br'),
-
-        m('label', "Email:"),
-        m('input[type=text]', {
-          value: volunteer.email,
-          onchange: function(e) {
-            volunteer.email = e.currentTarget.value
-          }
-        }),
-        removeAnchor(ctrl, idx)
-      ])
+    m.component(Total, { /*2*/
+      count: ctrl.entry.volunteers.length,
+      discount: ctrl.discount
     }),
 
-    m('button', { onclick: ctrl.add }, 'Add another volunteer'),
-    m('br'),
+    m.component(Coupon, {
+      onSuccess: function(newDiscount) {
+        ctrl.discount = newDiscount
+      }
+    }),
+
     m('button', { onclick: ctrl.submit }, 'Submit')
   ])
-}
-
-function removeAnchor (ctrl, idx) {
-  if (ctrl.entry.volunteers.length >= 2) {
-    return m('button', { onclick: ctrl.remove.papp(idx) }, 'remove')
-  }
 }
