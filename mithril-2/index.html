@@ -7,22 +7,40 @@
 <a href="../index.html">&lt; Back to All Examples</a>
 <a href="https://github.com/mindeavor/blog-post-examples/tree/gh-pages/mithril-2">View Source on GitHub</a>
 
-<h1>Event Signup</h1>
-
 <div id="app"></div>
 
-<p><em>Hint: The correct coupon code is <b>happy</b></em></p>
-
 <script src="../vendor/mithril.js"></script>
-<script src="../ext/functions.js"></script>
+<script src="src/ext/functions.js"></script>
 
-<script src="src/components/contacts/contacts.js"></script>
-<script src="src/components/coupon/coupon.js"></script>
-<script src="src/components/total/total.js"></script>
-<script src="src/components/volunteer-form/volunteer-form.js"></script>
+<script src="src/models/Entry.js"></script>
+
+<script src="src/components/EntryForm.js"></script>
+<script src="src/components/EntryList.js"></script>
 
 <script>
-  m.mount(document.getElementById('app'), VolunteerForm)
+  // Seed some data
+  Entry.create({
+    "enteredAt": 1443018758199,
+    "volunteers": [
+      { name: "Alice", email: "alice@example.com" },
+      { name: "Bob", email: "bob@example.com" }
+    ]
+  })
+
+  Entry.create({
+    "enteredAt": 1443019047227,
+    "volunteers": [
+      { name: "Carl", email: "carl@example.com" },
+      { name: "Dan", email: "dan@example.com" },
+      { name: "Erl", email: "erl@example.com" },
+    ]
+  })
+
+  // Put the component on the page
+  m.route(document.getElementById('app'), '/', {
+    '/': EntryList,
+    '/entries/new': EntryForm
+  })
 </script>
 
 </body>
