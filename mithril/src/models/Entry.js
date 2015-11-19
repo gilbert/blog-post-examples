@@ -11,6 +11,7 @@
 
   Entry.create = function (attrs) {
     attrs.id = (idCounter += 1)
+    attrs.enteredAt = Date.now()
     store.push(attrs)
     return attrs
   }
