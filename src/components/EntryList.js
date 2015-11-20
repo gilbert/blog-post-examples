@@ -2,5 +2,5 @@
 window.EntryList = {}
 
 EntryList.view = function () {
-  // TODO: View code goes here
+  return m('h2', "TODO: REPLACE ME!")
 }
