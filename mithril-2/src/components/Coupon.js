@@ -1,50 +1,56 @@
+(function () {
 
-window.Coupon = {}
+  window.Coupon = {
 
-Coupon.controller = function (attrs) {
-  var ctrl = this
-  ctrl.code = ""
+    oninit (vnode) {
+      vnode.code = ""
+    },
 
-  ctrl.submit = function (e) {
+    view (vnode) {
+      var { state, attrs } = vnode
+
+      return m('form', { onsubmit: (e) => submit(e, state, attrs) }, [
+
+        state.error ? [
+          m('.error', "Invalid coupon.")
+        ] : null,
+
+        m('label', "Enter coupon (if you have one):"),
+        m('input[type=text]', {
+          value: state.code,
+          onchange: function(e) {
+            state.code = e.currentTarget.value
+          }
+        }),
+        m('button[type=submit]', "Validate coupon")
+      ])
+    }
+  }
+
+  function submit (e, state, attrs) {
     e.preventDefault()
-    ctrl.error = null
+    state.error = null
 
-    validateCoupon(ctrl.code)
+    validateCoupon(state.code)
       .then(function(discount) {
         alert('Coupon applied!')
-        ctrl.code = ""
+        state.code = ""
         attrs.onSuccess(discount)
       })
-      .then(null, function(err) {
-        ctrl.error = err
+      .catch(function(err) {
+        state.error = err
       })
   }
-}
 
-Coupon.view = function (ctrl) {
-  return m('form', { onsubmit: ctrl.submit }, [
+  function validateCoupon (code) {
+    var isValid = (code === 'happy')
+    var discount = 0.20
+    //
+    // Mock AJAX promise
+    //
+    return isValid
+      ? Promise.resolve(discount)
+      : Promise.reject('invalid_code')
+  }
 
-    ctrl.error ? [
-      m('.error', "Invalid coupon.")
-    ] : null,
-
-    m('label', "Enter coupon (if you have one):"),
-    m('input[type=text]', {
-      value: ctrl.code,
-      onchange: function(e) {
-        ctrl.code = e.currentTarget.value
-      }
-    }),
-    m('button[type=submit]', "Validate coupon")
-  ])
-}
-
-function validateCoupon (code) {
-  var isValid = (code === 'happy')
-  var discount = 0.20
-  // Mock AJAX promise
-  var deferred = m.deferred()
-  if (isValid) { deferred.resolve(discount) }
-  else         { deferred.reject('invalid_code') }
-  return deferred.promise
-}
+})()

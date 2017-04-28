@@ -1,34 +1,50 @@
-window.EntryForm = {}
+(function () {
 
-EntryForm.controller = function () {
-  var ctrl = this
-  ctrl.entry = Entry.vm()
-  ctrl.discount = 0
+  window.EntryForm = {
+    oninit (vnode) {
+      vnode.state.entry = Entry.vm()
+      vnode.state.discount = 0
+    },
 
-  ctrl.submit = function () {
-    Entry.create( ctrl.entry )
-    m.route('/')
+    view (vnode) {
+      var state = vnode.state
+
+      return m('.entry-form', [
+        m('h1', "Entry Form"),
+        m('h3', "Please enter each volunteer's contact information:"),
+
+        m(Volunteers, {
+          volunteers: state.entry.volunteers,
+          add: () => add(state),
+          remove: (idx) => remove(state, idx),
+        }),
+
+        m(Total, {
+          count: state.entry.volunteers.length,
+          discount: state.discount,
+        }),
+
+        m(Coupon, {
+          onSuccess: function(newDiscount) {
+            state.discount = newDiscount
+          }
+        }),
+
+        m('button', { onclick: () => submit(state) }, 'Submit')
+      ])
+    }
   }
-}
 
-EntryForm.view = function (ctrl) {
-  return m('.entry-form', [
-    m('h1', "Entry Form"),
-    m('h3', "Please enter each volunteer's contact information:"),
 
-    m.component(Volunteers, { volunteers: ctrl.entry.volunteers }),
+  function add (state) {
+    state.entry.volunteers.push( Entry.volunteerVM() )
+  }
+  function remove (state, idx) {
+    state.entry.volunteers.splice(idx, 1)
+  }
 
-    m.component(Total, { /*2*/
-      count: ctrl.entry.volunteers.length,
-      discount: ctrl.discount
-    }),
-
-    m.component(Coupon, {
-      onSuccess: function(newDiscount) {
-        ctrl.discount = newDiscount
-      }
-    }),
-
-    m('button', { onclick: ctrl.submit }, 'Submit')
-  ])
-}
+  function submit (state) {
+    Entry.create( state.entry )
+    m.route.set('#!/')
+  }
+})()

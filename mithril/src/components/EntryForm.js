@@ -1,58 +1,64 @@
-window.EntryForm = {}
+(function () {
 
-EntryForm.controller = function () {
-  var ctrl = this
-  ctrl.entry = Entry.vm()
+  window.EntryForm = {
 
-  ctrl.add = function () {
-    ctrl.entry.volunteers.push( Entry.volunteerVM() )
-  }
-  ctrl.remove = function (idx) {
-    ctrl.entry.volunteers.splice(idx, 1)
-  }
-  ctrl.submit = function () {
-    Entry.create( ctrl.entry )
-    m.route('/')
-  }
-}
+    oninit (vnode) {
+      vnode.state.entry = Entry.vm()
+    },
 
-EntryForm.view = function (ctrl) {
-  return m('.entry-form', [
-    m('h1', "Entry Form"),
-    m('h3', "Please enter each volunteer's contact information:"),
+    view (vnode) {
+      var state = vnode.state
 
-    ctrl.entry.volunteers.map(function(volunteer, idx) {
-      return m('fieldset', [
-        m('legend', "Volunteer #" + (idx+1)),
+      return m('.entry-form', [
+        m('h1', "Entry Form"),
+        m('h3', "Please enter each volunteer's contact information:"),
 
-        m('label', "Name:"),
-        m('input[type=text]', {
-          value: volunteer.name,
-          onchange: function(e) {
-            volunteer.name = e.currentTarget.value
-          }
+        state.entry.volunteers.map(function(volunteer, idx) {
+          return m('fieldset', [
+            m('legend', "Volunteer #" + (idx+1)),
+
+            m('label', "Name:"),
+            m('input[type=text]', {
+              value: volunteer.name,
+              onchange: function(e) {
+                volunteer.name = e.currentTarget.value
+              }
+            }),
+            m('br'),
+
+            m('label', "Email:"),
+            m('input[type=text]', {
+              value: volunteer.email,
+              onchange: function(e) {
+                volunteer.email = e.currentTarget.value
+              }
+            }),
+            removeAnchor(state, idx)
+          ])
         }),
+
+        m('button', { onclick: () => add(state) }, 'Add another volunteer'),
         m('br'),
-
-        m('label', "Email:"),
-        m('input[type=text]', {
-          value: volunteer.email,
-          onchange: function(e) {
-            volunteer.email = e.currentTarget.value
-          }
-        }),
-        removeAnchor(ctrl, idx)
+        m('button', { onclick: () => submit(state) }, 'Submit')
       ])
-    }),
-
-    m('button', { onclick: ctrl.add }, 'Add another volunteer'),
-    m('br'),
-    m('button', { onclick: ctrl.submit }, 'Submit')
-  ])
-}
-
-function removeAnchor (ctrl, idx) {
-  if (ctrl.entry.volunteers.length >= 2) {
-    return m('button', { onclick: ctrl.remove.papp(idx) }, 'remove')
+    }
   }
-}
+
+  function removeAnchor (state, idx) {
+    if (state.entry.volunteers.length >= 2) {
+      return m('button', { onclick: () => remove(state, idx) }, 'remove')
+    }
+  }
+
+  function add (state) {
+    state.entry.volunteers.push( Entry.volunteerVM() )
+  }
+  function remove (state, idx) {
+    state.entry.volunteers.splice(idx, 1)
+  }
+  function submit (state) {
+    Entry.create( state.entry )
+    m.route.set('/')
+  }
+
+})()
