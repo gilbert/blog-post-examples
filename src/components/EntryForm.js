@@ -1,13 +1,13 @@
-window.EntryForm = {}
 
-EntryForm.controller = function () {
-  var ctrl = this
-  // TODO: Controller code goes here
-}
+window.EntryForm = function () {
+  // TODO: State goes here
 
-EntryForm.view = function (ctrl) {
-  return m('.entry-form', [
-    m('h1', "New Entry"),
-    // TODO
-  ])
+  return {
+    view() {
+      return m('.entry-form', [
+        m('h1', "New Entry"),
+        // TODO
+      ])
+    }
+  }
 }
