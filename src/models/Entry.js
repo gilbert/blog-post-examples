@@ -15,4 +15,18 @@
     return attrs
   }
 
+  Entry.vm = function () {
+    return {
+      enteredAt: null,
+      volunteers: [ Entry.volunteerVM() ]
+    }
+  }
+
+  Entry.volunteerVM = function () {
+    return {
+      name: '[Your name]',
+      email: '[Your email]'
+    }
+  }
+
 })()
