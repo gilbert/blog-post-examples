@@ -1,10 +1,9 @@
-window.Coupon = {}
 
-Coupon.controller = function () {
-  var ctrl = this;
-  // TODO: Controller code goes here
-}
-
-Coupon.view = function (ctrl) {
-  // TODO: View code goes here
+window.Coupon = function () {
+  // TODO: Action and state go here
+  return {
+    view() {
+      // TODO: View code goes here
+    }
+  }
 }

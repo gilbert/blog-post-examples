@@ -1,5 +1,6 @@
-window.Total = {}
 
-Total.view = function (ctrl) {
-  // View code goes here
+window.Total = {
+  view() {
+    // TODO: View code goes here
+  }
 }
