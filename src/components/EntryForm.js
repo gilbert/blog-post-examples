@@ -1,6 +1,7 @@
 
 window.EntryForm = function () {
   var entry = Entry.vm()
+  var discount = 0 /* (A) */
 
   function add () {
     entry.volunteers.push( Entry.volunteerVM() )
@@ -15,31 +16,27 @@ window.EntryForm = function () {
 
   return {
     view() {
-      var showRemove = (entry.volunteers.length >= 2)
       return m('.entry-form', [
         m('h1', "New Entry"),
         m('h3', "Please enter each volunteer's contact information:"),
 
-        entry.volunteers.map(function(volunteer, idx) {
-          return m('fieldset', [
-            m('legend', "Volunteer #" + (idx+1)),
-            m('label', "Name:"),
-            m('input[type=text]', {
-              value: volunteer.name,
-              onchange(e) {
-                volunteer.name = e.target.value
-              }
-            }),
-            m('br'),
-            m('label', "Email:"),
-            m('input[type=text]', { value: volunteer.email }),
-
-            showRemove &&
-            m('button', { onclick() { remove(idx) } }, 'remove')
-          ])
+        m(Volunteers, {
+          add: add,
+          remove: remove,
+          volunteers: entry.volunteers
         }),
 
-        m('button', { onclick: add }, 'Add another volunteer'),
+        m(Total, {
+          count: entry.volunteers.length,
+          discount: discount
+        }),
+
+        m(Coupon, {
+          onSuccess(newDiscount) {
+            discount = newDiscount
+          }
+        }),
+
         m('br'),
         m('button', { onclick: submit }, 'Submit'),
       ])
