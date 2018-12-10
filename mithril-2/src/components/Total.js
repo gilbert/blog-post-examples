@@ -1,43 +1,31 @@
-(function () {
 
-  window.Total = {
-    view ({ attrs }) {
-
-      return m('.total', [
-        m('label', "Total: "),
-        discountView(attrs),
-        m('b', "$" + Total.calcPrice(attrs.discount, attrs.count))
-      ])
-    }
+window.Total = {
+  view(vnode) {
+    var {count, discount} = vnode.attrs
+    return m('.total', [
+      m('label', "Total: "),
+      discount > 0 &&
+        discountView(count, discount),
+      m('b', "$" + calculatePrice(discount, count))
+    ])
   }
+}
 
-  //
-  // Model-level logic
-  //
-  Total.pricePerCount = 10
+function discountView (count, discount) {
+  var total = calculateTotal(count)
+  var discountedAmount = total * discount
+  return m('span', "(Coupon discount: -$" + discountedAmount + ")")
+}
 
-  Total.calcPrice = function (discount, count) {
-    var total = count * Total.pricePerCount
-    return roundCents(total - total * discount)
-  }
-
-  Total.calcDiscount = function (discount, count) {
-    var total = count * Total.pricePerCount
-    return roundCents(total * discount)
-  }
-
-  //
-  // Helpers
-  //
-  function discountView (attrs) {
-    if (attrs.discount > 0) {
-      var discountedAmount =
-        Total.calcDiscount(attrs.discount, attrs.count)
-      return m('span', "(Coupon discount: -$" + discountedAmount + ")")
-    }
-  }
-  function roundCents (num) {
-    return Math.round(num * 100) / 100
-  }
-
-})()
+/* Model logic */
+var PRICE_PER_COUNT = 10
+function calculatePrice (discount, count) {
+  var total = calculateTotal(count)
+  return roundCents(total - total * discount)
+}
+function calculateTotal (count) {
+  return count * PRICE_PER_COUNT
+}
+function roundCents (num) {
+  return Math.round(num * 100) / 100
+}

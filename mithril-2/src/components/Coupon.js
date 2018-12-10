@@ -1,56 +1,47 @@
-(function () {
 
-  window.Coupon = {
+window.Coupon = function () {
+  var code = ''
+  var error = null
 
-    oninit (vnode) {
-      vnode.code = ""
-    },
-
-    view (vnode) {
-      var { state, attrs } = vnode
-
-      return m('form', { onsubmit: (e) => submit(e, state, attrs) }, [
-
-        state.error ? [
-          m('.error', "Invalid coupon.")
-        ] : null,
-
+  function submit (onSuccess) {
+    error = null
+    validateCoupon(code)
+      .then(function (discount) {
+        alert('Coupon applied!')
+        code = ''
+        onSuccess(discount)
+      })
+      .catch(function (err) {
+        error = err
+      })
+  }
+  return {
+    view(vnode) {
+      var {onSuccess} = vnode.attrs
+      return m('form', {
+        onsubmit(e) {
+          e.preventDefault()
+          submit(onSuccess)
+        }
+      }, [
+        error && m('.error', error),
         m('label', "Enter coupon (if you have one):"),
         m('input[type=text]', {
-          value: state.code,
-          onchange: function(e) {
-            state.code = e.currentTarget.value
+          value: code,
+          onchange(e) {
+            code = e.target.value
           }
         }),
         m('button[type=submit]', "Validate coupon")
       ])
     }
   }
+}
 
-  function submit (e, state, attrs) {
-    e.preventDefault()
-    state.error = null
-
-    validateCoupon(state.code)
-      .then(function(discount) {
-        alert('Coupon applied!')
-        state.code = ""
-        attrs.onSuccess(discount)
-      })
-      .catch(function(err) {
-        state.error = err
-      })
-  }
-
-  function validateCoupon (code) {
-    var isValid = (code === 'happy')
-    var discount = 0.20
-    //
-    // Mock AJAX promise
-    //
-    return isValid
-      ? Promise.resolve(discount)
-      : Promise.reject('invalid_code')
-  }
-
-})()
+function validateCoupon (code) {
+  var isValid = (code === 'happy')
+  var discount = 0.20
+  // Mock AJAX promise
+  if (isValid) return Promise.resolve(discount)
+  else         return Promise.reject('invalid_code')
+}

@@ -1,21 +1,17 @@
-<html>
-<head>
-  <title>Volunteer Events</title>
-</head>
-<body>
-
-<a href="../index.html">&lt; Back to All Examples</a>
-<a href="https://github.com/mindeavor/blog-post-examples/tree/gh-pages/mithril">View Source on GitHub</a>
+<!doctype html><title>Volunteer Events</title>
 
 <div id="app"></div>
 
-<script src="../ext/functions.js"></script>
-<script src="../vendor/mithril.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mithril/2.0.0-rc.3/mithril.min.js"></script>
 
 <script src="src/models/Entry.js"></script>
 
 <script src="src/components/EntryForm.js"></script>
 <script src="src/components/EntryList.js"></script>
+<!-- These two are placeholders for part 2 -->
+<script src="src/components/Volunteers.js"></script>
+<script src="src/components/Coupon.js"></script>
+<script src="src/components/Total.js"></script>
 
 <script>
   // Seed some data
@@ -23,7 +19,7 @@
     "enteredAt": 1443018758199,
     "volunteers": [
       { name: "Alice", email: "alice@example.com" },
-      { name: "Bob", email: "bob@example.com" },
+      { name: "Bob", email: "bob@example.com" }
     ]
   })
 
@@ -36,12 +32,18 @@
     ]
   })
 
-  // Put the component on the page
+  // Render our app onto the page
   m.route(document.getElementById('app'), '/', {
+
     '/': EntryList,
+
     '/entries/new': EntryForm,
+
+    '/inline-example': {
+      view() {
+        return m('a[href=/]', { oncreate: m.route.link }, 'Works the same!')
+      }
+    },
+
   })
 </script>
-
-</body>
-</html>

@@ -1,50 +1,45 @@
-(function () {
 
-  window.EntryForm = {
-    oninit (vnode) {
-      vnode.state.entry = Entry.vm()
-      vnode.state.discount = 0
-    },
+window.EntryForm = function () {
+  var entry = Entry.vm()
+  var discount = 0 /* (A) */
 
-    view (vnode) {
-      var state = vnode.state
+  function add () {
+    entry.volunteers.push( Entry.volunteerVM() )
+  }
+  function remove (idx) {
+    entry.volunteers.splice(idx, 1)
+  }
+  function submit () {
+    Entry.create(entry)
+    m.route.set('/')
+  }
 
+  return {
+    view() {
       return m('.entry-form', [
-        m('h1', "Entry Form"),
+        m('h1', "New Entry"),
         m('h3', "Please enter each volunteer's contact information:"),
 
         m(Volunteers, {
-          volunteers: state.entry.volunteers,
-          add: () => add(state),
-          remove: (idx) => remove(state, idx),
+          add: add,
+          remove: remove,
+          volunteers: entry.volunteers
         }),
 
         m(Total, {
-          count: state.entry.volunteers.length,
-          discount: state.discount,
+          count: entry.volunteers.length,
+          discount: discount
         }),
 
         m(Coupon, {
-          onSuccess: function(newDiscount) {
-            state.discount = newDiscount
+          onSuccess(newDiscount) {
+            discount = newDiscount
           }
         }),
 
-        m('button', { onclick: () => submit(state) }, 'Submit')
+        m('br'),
+        m('button', { onclick: submit }, 'Submit'),
       ])
     }
   }
-
-
-  function add (state) {
-    state.entry.volunteers.push( Entry.volunteerVM() )
-  }
-  function remove (state, idx) {
-    state.entry.volunteers.splice(idx, 1)
-  }
-
-  function submit (state) {
-    Entry.create( state.entry )
-    m.route.set('#!/')
-  }
-})()
+}
